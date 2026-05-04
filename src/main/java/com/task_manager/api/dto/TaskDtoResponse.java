@@ -1,6 +1,7 @@
-package com.task_manager.api;
+package com.task_manager.api.dto;
 
-import com.task_manager.domain.TaskStatus;
+import com.task_manager.domain.Task.TaskPriority;
+import com.task_manager.domain.Task.TaskStatus;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,6 +12,8 @@ public record TaskDtoResponse(
         String description,
         TaskStatus status,
         LocalDateTime createdAt,
-        LocalDate deadline
+        LocalDate deadline,
+        TaskPriority priority,
+        Long userId
 ) {
 }

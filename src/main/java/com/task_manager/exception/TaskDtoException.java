@@ -1,4 +1,4 @@
-package com.task_manager.domain.exception;
+package com.task_manager.exception;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;

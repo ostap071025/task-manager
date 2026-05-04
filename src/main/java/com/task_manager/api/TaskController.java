@@ -1,13 +1,14 @@
-package com.task_manager.domain;
+package com.task_manager.api;
 
-import com.task_manager.api.TaskDtoRequest;
-import com.task_manager.api.TaskDtoResponse;
+import com.task_manager.api.dto.TaskDtoRequest;
+import com.task_manager.api.dto.TaskDtoResponse;
+import com.task_manager.domain.Task.PrioritySort;
+import com.task_manager.domain.Task.TaskService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @AllArgsConstructor
@@ -16,12 +17,13 @@ public class TaskController {
 
     private final TaskService service;
 
-    @PostMapping("create")
+    @PostMapping("create/users/{userId}/tasks")
     public TaskDtoResponse createTask(
+            @PathVariable Long userId,
             @Valid @RequestBody TaskDtoRequest request
     ) {
         log.info("Called method createTask with id={}");
-        return service.createTask(request);
+        return service.createTask(userId, request);
     }
 
     @GetMapping("/getById/{id}")
@@ -33,10 +35,15 @@ public class TaskController {
         return service.getOne(id, request);
     }
 
-    @GetMapping("/getAll")
-    public List<TaskDtoResponse> getAll(){
+    @GetMapping("/users/{userId}/tasks")
+    public Page<TaskDtoResponse> getAll(
+            @PathVariable("userId") Long userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "HIGH") PrioritySort sortPriority
+            ){
         log.info("Called method getAll");
-        return service.getAll();
+        return service.getAll(userId, page, size, sortPriority);
     }
 
     @PutMapping("/updateStatus/{id}")
@@ -55,6 +62,9 @@ public class TaskController {
         log.info("Called deleteTask with id={}", id);
         return service.deleteTask(id);
     }
+
+
+
 
 }
 

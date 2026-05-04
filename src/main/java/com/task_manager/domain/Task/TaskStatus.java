@@ -1,4 +1,4 @@
-package com.task_manager.domain;
+package com.task_manager.domain.Task;
 
 public enum TaskStatus {
     IN_PROCESS,

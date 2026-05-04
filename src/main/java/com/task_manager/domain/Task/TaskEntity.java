@@ -1,15 +1,11 @@
-package com.task_manager.domain;
+package com.task_manager.domain.Task;
 
+import com.task_manager.domain.User.UserEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -37,8 +33,19 @@ public class TaskEntity {
     @Column (name = "createdAt", nullable = false)
     LocalDateTime createdAt;
 
-    @Column(name = "deadline", nullable = false)
+    @Column(name = "deadline")
     LocalDate deadline;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority")
+    TaskPriority priority;
+
+    private int priorityLevel;
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
 
 
     @PrePersist
