@@ -31,13 +31,13 @@ public class GlobalExceptionDto {
 
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public TaskDtoException handleAllExceptions(Exception e) {
-//        return new TaskDtoException(
-//                "Internal server error",
-//                e.getMessage(),
-//                LocalDateTime.now()
-//        );
-//    }
-
+    @ExceptionHandler(TaskNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public TaskDtoException handleTaskNotFoundException(UserNotFoundException e) {
+        return new TaskDtoException(
+                "Task not found",
+                e.getMessage(),
+                LocalDateTime.now()
+        );
+    }
 }

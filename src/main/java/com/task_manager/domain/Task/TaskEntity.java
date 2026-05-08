@@ -48,6 +48,11 @@ public class TaskEntity {
     private UserEntity user;
 
 
+
+
+
+
+
     @PrePersist
     void setNow() {
         this.createdAt = LocalDateTime.now();

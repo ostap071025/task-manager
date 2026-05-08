@@ -45,7 +45,7 @@ public class TaskService {
         return mapper.toDto(found);
     }
 
-    public Page<TaskDtoResponse> getAll(Long userId, int page, int size, PrioritySort sortDirection) {
+    public Page<TaskDtoResponse> getAll(int page, int size, PrioritySort sortDirection) {
 
 
         Sort sort = sortDirection == PrioritySort.HIGH
@@ -56,7 +56,7 @@ public class TaskService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<TaskEntity> tasks = repository.findAllByUser_Id(userId, pageable);
+        Page<TaskEntity> tasks = repository.findAll(pageable);
         return tasks.map(mapper::toDto);
 
     }

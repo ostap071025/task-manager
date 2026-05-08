@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @AllArgsConstructor
-@RestController
+@RestController("tasks")
 public class TaskController {
 
     private final TaskService service;
 
-    @PostMapping("create/users/{userId}/tasks")
+    @PostMapping("create/{userId}")
     public TaskDtoResponse createTask(
             @PathVariable Long userId,
             @Valid @RequestBody TaskDtoRequest request
@@ -35,15 +35,14 @@ public class TaskController {
         return service.getOne(id, request);
     }
 
-    @GetMapping("/users/{userId}/tasks")
+    @GetMapping("/getAll/tasks")
     public Page<TaskDtoResponse> getAll(
-            @PathVariable("userId") Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "HIGH") PrioritySort sortPriority
             ){
         log.info("Called method getAll");
-        return service.getAll(userId, page, size, sortPriority);
+        return service.getAll(page, size, sortPriority);
     }
 
     @PutMapping("/updateStatus/{id}")
@@ -62,8 +61,6 @@ public class TaskController {
         log.info("Called deleteTask with id={}", id);
         return service.deleteTask(id);
     }
-
-
 
 
 }

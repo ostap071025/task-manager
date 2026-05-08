@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class TaskMapper {
     public TaskEntity toEntity(TaskDtoRequest request) {
-        UserEntity entityUser = new UserEntity();
         TaskEntity entity = new TaskEntity();
         entity.setTitle(request.title());
         entity.setDescription(request.description());
@@ -29,7 +28,8 @@ public class TaskMapper {
                 entity.getCreatedAt(),
                 entity.getDeadline(),
                 entity.getPriority(),
-                entity.getUser().getId()
+                entity.getUser().getId(),
+                entity.getUser().getName()
         );
         return response;
     }
