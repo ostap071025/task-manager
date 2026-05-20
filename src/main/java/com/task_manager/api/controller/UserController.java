@@ -4,7 +4,7 @@ import com.task_manager.api.dto.tasks.TaskDtoResponse;
 import com.task_manager.api.dto.users.UserCreateRequestDto;
 import com.task_manager.api.dto.users.UserResponseDto;
 import com.task_manager.api.dto.users.UserUpdateRequestDto;
-import com.task_manager.domain.User.UserService;
+import com.task_manager.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

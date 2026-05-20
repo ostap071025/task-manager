@@ -1,5 +1,7 @@
 package com.task_manager.mapper;
 
+import com.task_manager.api.dto.auth.AuthResponseDto;
+import com.task_manager.api.dto.auth.RegisterRequestDto;
 import com.task_manager.api.dto.users.*;
 import com.task_manager.domain.User.UserEntity;
 import org.springframework.stereotype.Component;
@@ -43,6 +45,29 @@ public class UserMapper {
         if (requestDto.email() != null && !requestDto.email().equals("string")) {
             entity.setEmail(requestDto.email());
         }
+    }
+
+
+
+
+    public UserEntity toEntity(RegisterRequestDto request) {
+        UserEntity user = new UserEntity();
+        user.setEmail(request.email());
+        user.setPassword(request.password());
+        user.setName(request.name());
+        return user;
+    }
+
+
+    public AuthResponseDto toDto(UserEntity entity, String message) {
+        AuthResponseDto responseDto = new AuthResponseDto(
+                entity.getId(),
+                entity.getEmail(),
+                entity.getRole(),
+                message
+        );
+
+        return responseDto;
     }
 }
 

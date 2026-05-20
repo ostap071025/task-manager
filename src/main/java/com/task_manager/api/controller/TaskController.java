@@ -4,7 +4,7 @@ import com.task_manager.api.dto.tasks.TaskDtoCreateRequest;
 import com.task_manager.api.dto.tasks.TaskDtoResponse;
 import com.task_manager.api.dto.tasks.TaskDtoUpdateRequest;
 import com.task_manager.domain.Task.PrioritySort;
-import com.task_manager.domain.Task.TaskService;
+import com.task_manager.domain.service.TaskService;
 import com.task_manager.domain.Task.TaskStatus;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

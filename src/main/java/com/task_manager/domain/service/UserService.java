@@ -1,9 +1,10 @@
-package com.task_manager.domain.User;
+package com.task_manager.domain.service;
 
 import com.task_manager.api.dto.tasks.TaskDtoResponse;
 import com.task_manager.api.dto.users.UserCreateRequestDto;
 import com.task_manager.api.dto.users.UserResponseDto;
 import com.task_manager.api.dto.users.UserUpdateRequestDto;
+import com.task_manager.domain.User.UserEntity;
 import com.task_manager.exception.user.UserNotFoundException;
 import com.task_manager.mapper.TaskMapper;
 import com.task_manager.mapper.UserMapper;
@@ -15,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

@@ -1,8 +1,11 @@
-package com.task_manager.domain.Task;
+package com.task_manager.domain.service;
 
 import com.task_manager.api.dto.tasks.TaskDtoCreateRequest;
 import com.task_manager.api.dto.tasks.TaskDtoResponse;
 import com.task_manager.api.dto.tasks.TaskDtoUpdateRequest;
+import com.task_manager.domain.Task.PrioritySort;
+import com.task_manager.domain.Task.TaskEntity;
+import com.task_manager.domain.Task.TaskStatus;
 import com.task_manager.exception.task.TaskNotFoundException;
 import com.task_manager.mapper.TaskMapper;
 import com.task_manager.repository.TaskRepository;

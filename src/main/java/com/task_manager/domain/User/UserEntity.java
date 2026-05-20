@@ -1,6 +1,8 @@
 package com.task_manager.domain.User;
 
+import com.fasterxml.jackson.databind.annotation.EnumNaming;
 import com.task_manager.domain.Task.TaskEntity;
+import com.task_manager.domain.authentication.UserRole;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +40,9 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user")
     private List<TaskEntity> tasks = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 
 
     @PrePersist
