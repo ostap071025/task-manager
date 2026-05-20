@@ -1,8 +1,9 @@
 package com.task_manager.domain.Task;
 
-import com.task_manager.api.dto.TaskDtoRequest;
-import com.task_manager.api.dto.TaskDtoResponse;
-import com.task_manager.exception.TaskNotFoundException;
+import com.task_manager.api.dto.tasks.TaskDtoCreateRequest;
+import com.task_manager.api.dto.tasks.TaskDtoResponse;
+import com.task_manager.api.dto.tasks.TaskDtoUpdateRequest;
+import com.task_manager.exception.task.TaskNotFoundException;
 import com.task_manager.mapper.TaskMapper;
 import com.task_manager.repository.TaskRepository;
 import com.task_manager.repository.UserRepository;
@@ -22,7 +23,7 @@ public class TaskService {
     private final TaskMapper mapper;
 
 
-    public TaskDtoResponse createTask(Long userId, TaskDtoRequest request) {
+    public TaskDtoResponse createTask(Long userId, TaskDtoCreateRequest request) {
         var entity = mapper.toEntity(request);
         if (entity.getStatus() != TaskStatus.IN_PROCESS
             && entity.getStatus() != TaskStatus.DONE
@@ -39,13 +40,13 @@ public class TaskService {
     }
 
 
-    public TaskDtoResponse getOne(Long id, TaskDtoRequest request) {
+    public TaskDtoResponse getOne(Long id) {
         var found = repository.findById(id)
                 .orElseThrow(() ->  new TaskNotFoundException(id));
         return mapper.toDto(found);
     }
 
-    public Page<TaskDtoResponse> getAll(int page, int size, PrioritySort sortDirection) {
+    public Page<TaskDtoResponse> getAll(int page, int size, PrioritySort sortDirection, TaskStatus taskStatus) {
 
 
         Sort sort = sortDirection == PrioritySort.HIGH
@@ -53,24 +54,25 @@ public class TaskService {
                 : Sort.by("priorityLevel").ascending();
 
         sort = sort.and(Sort.by("deadline").descending());
-
         Pageable pageable = PageRequest.of(page, size, sort);
+        Page<TaskEntity> tasks;
 
-        Page<TaskEntity> tasks = repository.findAll(pageable);
+        if (taskStatus != null) {
+            tasks = repository.findByStatus(taskStatus, pageable);
+        } else {
+            tasks = repository.findAll(pageable);
+        }
+
         return tasks.map(mapper::toDto);
 
     }
 
-    public TaskDtoResponse updateStatus(Long id, TaskDtoRequest request) {
-        var found = repository.findById(id).
-            orElseThrow(() -> new TaskNotFoundException(id));
-        found.setStatus(
-            request.status().equals(TaskStatus.DONE)
-                ? TaskStatus.DONE
-                : TaskStatus.FAILED
-        );
-        repository.save(found);
-        return mapper.toDto(found);
+    public TaskDtoResponse updateTask(Long id, TaskDtoUpdateRequest request) {
+        var found = repository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(id));
+        mapper.updateEntity(found, request);
+        var saved = repository.save(found);
+        return mapper.toDto(saved);
     }
 
     public TaskDtoResponse deleteTask(Long id) {

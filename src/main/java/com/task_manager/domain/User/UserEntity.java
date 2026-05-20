@@ -24,13 +24,13 @@ public class UserEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     String password;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     String name;
 
     @Column(name = "joined_at")

@@ -1,9 +1,6 @@
-package com.task_manager.api.dto;
-
-import com.task_manager.domain.User.UserEntity;
+package com.task_manager.api.dto.users;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record UserResponseDto (

@@ -1,4 +1,4 @@
-package com.task_manager.exception;
+package com.task_manager.exception.task;
 
 public class TaskNotFoundException extends RuntimeException{
     public TaskNotFoundException (Long id) {

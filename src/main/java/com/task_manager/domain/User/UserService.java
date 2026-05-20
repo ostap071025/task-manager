@@ -1,18 +1,22 @@
 package com.task_manager.domain.User;
 
-import com.task_manager.api.dto.UserRequestDto;
-import com.task_manager.api.dto.UserResponseDto;
-import com.task_manager.exception.TaskNotFoundException;
-import com.task_manager.exception.UserNotFoundException;
+import com.task_manager.api.dto.tasks.TaskDtoResponse;
+import com.task_manager.api.dto.users.UserCreateRequestDto;
+import com.task_manager.api.dto.users.UserResponseDto;
+import com.task_manager.api.dto.users.UserUpdateRequestDto;
+import com.task_manager.exception.user.UserNotFoundException;
+import com.task_manager.mapper.TaskMapper;
 import com.task_manager.mapper.UserMapper;
+import com.task_manager.repository.TaskRepository;
 import com.task_manager.repository.UserRepository;
 import lombok.AllArgsConstructor;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,10 +24,15 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final TaskRepository taskRepository;
+    private final TaskMapper taskMapper;
 
 
-    public UserResponseDto createUser(UserRequestDto userRequestDto) {
-        UserEntity userEntity = userMapper.userToEntity(userRequestDto);
+    public UserResponseDto createUser(UserCreateRequestDto request) {
+        UserEntity userEntity = userMapper.userToEntity(request);
+//        if (userRepository.existsByEmail(request.email())) {
+//            throw new IllegalArgumentException("User with this email already exists");
+//        }
         var saved = userRepository.save(userEntity);
         return userMapper.userToDto(saved);
     }
@@ -35,34 +44,46 @@ public class UserService {
     }
 
 
-    public List<UserResponseDto> getAll() {
-        List<UserEntity> userList = userRepository.findAll();
-        var userDtoList = userList.stream().map(userMapper::userToDto).toList();
-        return userDtoList;
+    public Page<UserResponseDto> getAll(
+            int page,
+            int size,
+            String email,
+            String name
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserEntity> users;
+        if (email != null) {
+            users = userRepository.findByEmail(email, pageable);
+        } else if (name != null) {
+            users = userRepository.findByName(name, pageable);
+        } else {
+            users = userRepository.findAll(pageable);
+        }
+        return users.map(userMapper::userToDto);
     }
 
 
-    public UserResponseDto updateName(Long id, UserRequestDto userRequestDto) {
+    public UserResponseDto updateUser(Long id, UserUpdateRequestDto request) {
         var found = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        found.setName(userRequestDto.name());
-        var saved = userRepository.save(found);
-        return userMapper.userToDto(saved);
-    }
-
-    public UserResponseDto updatePassword(Long id, UserRequestDto userRequestDto) {
-        var found = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-        found.setPassword(userRequestDto.password());
+        userMapper.updateUser(found, request);
         var saved = userRepository.save(found);
         return userMapper.userToDto(saved);
     }
 
 
     public UserResponseDto deleteUser(Long id) {
-        var founded = userRepository.findById(id)
+        var found = userRepository.findByIdWithTasks(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        userRepository.deleteById(id);
-        return userMapper.userToDto(founded);
+        var response = userMapper.userToDto(found);
+        userRepository.delete(found);
+        return response;
+    }
+
+    public List<TaskDtoResponse> getUserTask(Long user_id) {
+        return taskRepository.findAllByUser_Id(user_id)
+                .stream()
+                .map(taskMapper::toDto)
+                .toList();
     }
 }

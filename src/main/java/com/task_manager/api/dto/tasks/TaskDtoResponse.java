@@ -1,8 +1,7 @@
-package com.task_manager.api.dto;
+package com.task_manager.api.dto.tasks;
 
 import com.task_manager.domain.Task.TaskPriority;
 import com.task_manager.domain.Task.TaskStatus;
-import com.task_manager.domain.User.UserEntity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

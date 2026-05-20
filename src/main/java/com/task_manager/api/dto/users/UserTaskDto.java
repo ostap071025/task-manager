@@ -1,4 +1,4 @@
-package com.task_manager.api.dto;
+package com.task_manager.api.dto.users;
 
 public record UserTaskDto(
         String title,

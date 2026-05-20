@@ -1,16 +1,12 @@
 package com.task_manager.mapper;
 
-import com.task_manager.api.dto.UserRequestDto;
-import com.task_manager.api.dto.UserResponseDto;
-import com.task_manager.api.dto.UserTaskDto;
+import com.task_manager.api.dto.users.*;
 import com.task_manager.domain.User.UserEntity;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
 @Component
 public class UserMapper {
-    public UserEntity userToEntity(UserRequestDto userRequest) {
+    public UserEntity userToEntity(UserCreateRequestDto userRequest) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userRequest.email());
         userEntity.setPassword(userRequest.password());
@@ -31,6 +27,22 @@ public class UserMapper {
                         .toList()
         );
         return userResponse;
+    }
+
+
+
+    public void updateUser(UserEntity entity, UserUpdateRequestDto requestDto) {
+        if (requestDto.name() != null && !requestDto.name().equals("string")) {
+            entity.setName(requestDto.name());
+        }
+
+        if (requestDto.password() != null && !requestDto.password().equals("string")) {
+            entity.setPassword(requestDto.password());
+        }
+
+        if (requestDto.email() != null && !requestDto.email().equals("string")) {
+            entity.setEmail(requestDto.email());
+        }
     }
 }
 

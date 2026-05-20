@@ -1,4 +1,4 @@
-package com.task_manager.exception;
+package com.task_manager.exception.user;
 
 public class UserNotFoundException extends RuntimeException{
     public UserNotFoundException (Long id) {

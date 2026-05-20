@@ -1,4 +1,4 @@
-package com.task_manager.exception;
+package com.task_manager.exception.user;
 
 import java.time.LocalDateTime;
 
@@ -7,4 +7,5 @@ public record UserDtoException (
         String details,
         LocalDateTime timestamp
 ){
+
 }
