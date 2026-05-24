@@ -4,10 +4,21 @@ import com.task_manager.api.dto.auth.AuthResponseDto;
 import com.task_manager.api.dto.auth.RegisterRequestDto;
 import com.task_manager.api.dto.users.*;
 import com.task_manager.domain.User.UserEntity;
+import com.task_manager.domain.service.JwtService;
+import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+
+    public UserMapper(PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+    }
+
     public UserEntity userToEntity(UserCreateRequestDto userRequest) {
         UserEntity userEntity = new UserEntity();
         userEntity.setEmail(userRequest.email());
@@ -53,18 +64,17 @@ public class UserMapper {
     public UserEntity toEntity(RegisterRequestDto request) {
         UserEntity user = new UserEntity();
         user.setEmail(request.email());
-        user.setPassword(request.password());
         user.setName(request.name());
         return user;
     }
 
 
-    public AuthResponseDto toDto(UserEntity entity, String message) {
+    public AuthResponseDto toDto(UserEntity entity, String token) {
         AuthResponseDto responseDto = new AuthResponseDto(
+                token,
                 entity.getId(),
                 entity.getEmail(),
-                entity.getRole(),
-                message
+                entity.getRole()
         );
 
         return responseDto;

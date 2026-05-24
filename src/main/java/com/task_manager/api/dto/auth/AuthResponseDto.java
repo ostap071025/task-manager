@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record AuthResponseDto (
+        String token,
         Long id,
         String email,
-        UserRole role,
-        String message
+        UserRole role
 ) {
 }

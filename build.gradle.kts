@@ -1,3 +1,5 @@
+import org.gradle.internal.impldep.com.google.api.client.json.webtoken.JsonWebToken
+
 plugins {
 	java
 	id("org.springframework.boot") version "3.5.14"
@@ -21,7 +23,6 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
 	compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
@@ -30,6 +31,10 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testAnnotationProcessor("org.projectlombok:lombok")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation ("io.jsonwebtoken:jjwt-api:0.12.5")
+	runtimeOnly ("io.jsonwebtoken:jjwt-impl:0.12.5")
+	runtimeOnly ("io.jsonwebtoken:jjwt-jackson:0.12.5")
 }
 
 tasks.withType<Test> {
